@@ -1,6 +1,7 @@
 
-import {insert, update, delete_, select} from './operators.js'
+import {insert, update, delete_} from './operators.js'
 import Store from "./Store.js"
+import select from "./select.js"
 
 function db(options) {
 	this.store = new Store("Test db", options)
