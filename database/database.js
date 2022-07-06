@@ -17,17 +17,6 @@ db.prototype.select = select
 db.prototype.delete_ = delete_
 
 
-
-
-
-
-
-
-
-
-
-
-
 export default db 
 
 

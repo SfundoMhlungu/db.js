@@ -9,9 +9,10 @@ export default class Store{
 		   
          
 	}
-	 construtor(name, options){
+	 constructor(name, options){
+	  
          this.#meta.name = name;
-		 this.#meta.options = options
+		     this.#meta.options = options
 
 
 	  }
@@ -22,6 +23,7 @@ export default class Store{
    }
 
 	set setData(data){
+
 		data._id = this.#meta.length
 		if(this.#meta.options && this.#meta.options.timeStamp && this.#meta.options.timeStamp){
            data.timeStamp = Date.now()
@@ -111,7 +113,7 @@ Store.prototype.getAll = function(){
 
 
 Store.prototype.insert = function(data){
-	this.setData   = data
+	this.setData  = data
 
        
 

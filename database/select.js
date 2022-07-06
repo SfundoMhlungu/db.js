@@ -1,4 +1,9 @@
+const tracker = {
+     id: 0,
+     
 
+
+}
 
 
 
@@ -76,6 +81,76 @@ const search = function(comm, data){
 
 
 
+
+
+function functionalObj(store){
+          this.id = NaN;
+  
+          this.beginQuery = (channelName = "") => {	
+				   // prepare
+				   console.log("creating channel", channelName)
+				     if(tracker[this.id] && tracker[this.id].beganQ){
+									console.warn('please close the previous query');
+									return 
+					  }
+                     // keys = this.store.allKeys()
+              this.id = tracker.id
+               tracker[this.id] = {
+              filtered: [],
+              beganQ: false,
+              cName : channelName === "" ? this.id : channelName 
+             }
+                      
+            tracker.id++
+                    
+				    tracker[this.id].filtered = Object.values(store.getAll())
+				    tracker[this.id].beganQ = true
+				    console.log('opening channel: ', tracker[this.id].cName)
+				    console.log('tracker obj', tracker)
+                     
+				   };
+				   
+				   
+		        this.Where = (str) => {
+              if(!tracker[this.id] || tracker[this.id] && !tracker[this.id].beganQ){
+                          console.log('begin query to filter')
+						  return
+						}
+					   console.log(str)
+					let f = search(str, tracker[this.id].filtered)
+					// console.log(f, "f")
+					if(f.length > 0){
+						// filtered.push(f)
+						tracker[this.id].filtered = f
+				  	}
+					};
+					
+					 this.endQuery = () => {
+				  // end and remove stuff
+			    if(!tracker[this.id] || tracker[this.id] && !tracker[this.id].beganQ){
+					        console.warn('no query to close')
+					       return
+					}
+				        
+				  // console.log(keys)
+				           
+                   return {data:tracker[this.id].filtered, channel: tracker[this.id].cName}     
+				};
+				
+					this.close = ()=> {
+				
+				    if(tracker[this.id] && !tracker[this.id].closed){
+				          Reflect.deleteProperty(tracker, this.id)
+				          console.log('cleaned up', tracker)
+				    
+				    }
+				
+				
+				}
+
+}
+
+
 export default function select(option = "*"){
         if(Number(option) !== NaN && option !== "*"){
               
@@ -84,55 +159,9 @@ export default function select(option = "*"){
 		}     
 
 
-        let filtered = [];
-     let keys= []
-	let beganQ = false
+   
 		   // store : this.store
-	return {
-		       
-		       beginQuery: () => {	
-				   // prepare
-				     if(beganQ){
-						 console.warn('please close the previous query');
-						 return 
-					  }
-                     // keys = this.store.allKeys()
-				     filtered = Object.values(this.store.getAll())
-				   beganQ = true
-				   console.log('opening channels')
-                     
-				   }, 
-
-		        Where : (str) => {
-                      if(!beganQ){
-                          console.log('begin query to filter')
-						  return
-						}
-					   console.log(str)
-					let f = search(str, filtered)
-					console.log(f, "f")
-					if(f.length > 0){
-						// filtered.push(f)
-						filtered = f
-					}
-					},
-
-
-		      endQuery: () => {
-				  // end and remove stuff
-			    if(!beganQ){
-					console.warn('no query to close')
-					return
-					}
-				  console.log('closing channels')
-				  keys = []
-				  // console.log(keys)
-                   return filtered      
-				}
-
-            
-
-	  }
+	return  new functionalObj(this.store)
 
 
 }

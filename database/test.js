@@ -16,11 +16,26 @@ store.insert({name: "jane", surname: "doe", age: 0})
 // console.log("select",store.select().canYou())
 
 
-let c = store.select()
+const c = store.select()
 // let d = store.select(10)
 // console.log("d", d)
-c.beginQuery()
+c.beginQuery("THIS IS CHANNEL C")
 // c.Where('name === sk')
 // c.Where('surname === mhlungu')
 c.Where('age < 23')
-console.log(c.endQuery())
+
+
+const d = store.select()
+
+d.beginQuery("THIS IS CHANNEL D")
+d.Where('age > 10')
+
+console.log('===============================================')
+console.log(d.endQuery(), 'D RESULT age> 10')
+console.log('===============================================')
+console.log(c.endQuery(), "C RESULT age <  23")
+console.log('===============================================')
+c.close()
+d.close()
+
+
